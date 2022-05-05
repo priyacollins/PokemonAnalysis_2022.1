@@ -1,0 +1,67 @@
+---
+title: "pokemondataclean"
+author: "Priya Singh Collins"
+date: "5/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+pokemondata <- readr::read_csv(here::here("data", "pokemon.csv"))
+```
+
+### First, move name, height and weight columns to front of dataset for easy access.
+```{r}
+pokemondata <- pokemondata |>
+  select(name, height_m, weight_kg, everything())
+
+pokemondata
+```
+
+### Filter and summarize data for legendary pokemon
+```{r}
+pd_legendary <- pokemondata |>
+  select(name, height_m, weight_kg, capture_rate, is_legendary) |>
+  filter(is_legendary != 0)
+
+cap_rate_leg <- factor(pd_legendary$capture_rate)
+cap_rate_leg <- as.numeric(cap_rate_leg)
+
+height_m_leg <- pd_legendary |>
+  summarize(mean(height_m, na.rm = TRUE))
+
+weight_kg_leg <- pd_legendary |>
+  summarize(mean(weight_kg, na.rm = TRUE))
+
+cap_rate_leg <- pd_legendary |>
+  summarize(mean(cap_rate_leg, na.rm = TRUE))
+
+print(height_m_leg)
+print(weight_kg_leg)
+print(cap_rate_leg)
+```
+
+### Filter and summarize data for non-legendary pokemon
+```{r}
+pd_notlegendary <- pokemondata |>
+  select(name, height_m, weight_kg, capture_rate, is_legendary) |>
+  filter(is_legendary == 0)
+
+cap_rate_nleg <- factor(pd_notlegendary$capture_rate)
+cap_rate_nleg <- as.numeric(cap_rate_nleg)
+
+height_m_nleg <- pd_notlegendary |>
+  summarize(mean(height_m, na.rm = TRUE))
+
+weight_kg_nleg <- pd_notlegendary |>
+  summarize(mean(weight_kg, na.rm = TRUE))
+
+cap_rate_nleg <- pd_notlegendary |>
+  summarize(mean(cap_rate_nleg, na.rm = TRUE))
+
+print(height_m_nleg)
+print(weight_kg_nleg)
+print(cap_rate_nleg)
+```
