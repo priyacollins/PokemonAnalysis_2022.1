@@ -11,7 +11,7 @@ library(tidyverse)
 pokemondata <- readr::read_csv(here::here("data", "pokemon.csv"))
 ```
 
-### First, move name, height and weight columns to front of dataset for easy access.
+#### First, move name, height and weight columns to front of dataset for easy access.
 ```{r}
 pokemondata <- pokemondata |>
   select(name, height_m, weight_kg, everything())
@@ -19,7 +19,7 @@ pokemondata <- pokemondata |>
 pokemondata
 ```
 
-### Filter and summarize data for legendary pokemon
+#### Filter and summarize data for legendary pokemon
 ```{r}
 pd_legendary <- pokemondata |>
   select(name, height_m, weight_kg, capture_rate, is_legendary) |>
@@ -42,7 +42,7 @@ print(weight_kg_leg)
 print(cap_rate_leg)
 ```
 
-### Filter and summarize data for non-legendary pokemon
+#### Filter and summarize data for non-legendary pokemon
 ```{r}
 pd_notlegendary <- pokemondata |>
   select(name, height_m, weight_kg, capture_rate, is_legendary) |>
@@ -66,13 +66,23 @@ print(cap_rate_nleg)
 ```
 
 ```{r}
-sp_hw <- ggplot(pd_legendary) +
+sp_hw_leg <- ggplot(pd_legendary) +
   aes(x = height_m, y = weight_kg) +
   geom_point() +
   geom_smooth(method = lm)
 
-sp_hw + labs(title = "Height to Weight Ratio of Legendary Pokemon",
+sp_hw_leg + labs(title = "Height to Weight Ratio of Legendary Pokemon",
              x = "Height in m", y = "Weight in kg")
+```
+
+```{r}
+sp_hw_nleg <- ggplot(pd_notlegendary) +
+  aes(x = height_m, y = weight_kg) +
+  geom_point() +
+  geom_smooth(method = lm)
+
+sp_hw_nleg + labs(title = "Height to Weight Ratio of Non-Legendary Pokemon",
+                  x = "Height in m", y = "Weight in kg")
 ```
 
 ```{r}
@@ -87,3 +97,6 @@ sp_wcr <- ggplot(pokemondata) +
 sp_wcr + labs(title = "Correlation Between Weight and Capture Rate of Legendary and Non-Legendary Pokemon",
               x = "Weight in kg", y = "Capture Rate")
 ```
+
+
+#### After analysis of legendary versus non-legendary Pokemon, we can conclude that non-legendary Pokemon tend to have a lower height-to-weight ratio. Heavier (and taller) Pokemon - in general (a greater weight in kg and greater height in m) - have a lower capture rate when compared to lighter Pokemon.
