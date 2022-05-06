@@ -1,10 +1,9 @@
 ---
-title: "pokemondataclean"
+title: "pokemonplots"
 author: "Priya Singh Collins"
-date: "5/4/2022"
+date: "5/5/2022"
 output: html_document
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -64,4 +63,27 @@ cap_rate_nleg <- pd_notlegendary |>
 print(height_m_nleg)
 print(weight_kg_nleg)
 print(cap_rate_nleg)
+```
+
+```{r}
+sp_hw <- ggplot(pd_legendary) +
+  aes(x = height_m, y = weight_kg) +
+  geom_point() +
+  geom_smooth(method = lm)
+
+sp_hw + labs(title = "Height to Weight Ratio of Legendary Pokemon",
+             x = "Height in m", y = "Weight in kg")
+```
+
+```{r}
+sp_wcr <- ggplot(pokemondata) +
+  aes(x = weight_kg,
+      y = as.numeric(capture_rate),
+      fill = is_legendary,
+      color = is_legendary,
+      size = height_m) +
+  geom_point()
+
+sp_wcr + labs(title = "Correlation Between Weight and Capture Rate of Legendary and Non-Legendary Pokemon",
+              x = "Weight in kg", y = "Capture Rate")
 ```
